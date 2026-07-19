@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Interactive Sprite Transformation</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --panel:#171a21;
+    --accent:#5eead4;
+    --accent2:#f472b6;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', system-ui, sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px;
+  }
+  h1{
+    font-size:1.4rem;
+    margin:0 0 4px;
+  }
+  p.sub{
+    color:var(--muted);
+    margin:0 0 24px;
+    font-size:.9rem;
+  }
+  #stage{
+    background:var(--panel);
+    border:1px solid #262b36;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+  }
+  #hud{
+    margin-top:18px;
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    justify-content:center;
+    font-size:.85rem;
+    color:var(--muted);
+  }
+  #hud b{color:var(--accent);}
+  #controls{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:8px;
+    max-width:640px;
+    width:100%;
+    font-size:.8rem;
+  }
+  .key{
+    background:var(--panel);
+    border:1px solid #262b36;
+    border-radius:8px;
+    padding:8px 12px;
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .key span:first-child{
+    color:var(--accent2);
+    font-weight:600;
+  }
+  #reset{
+    margin-top:18px;
+    background:var(--accent);
+    color:#0f1115;
+    border:none;
+    border-radius:8px;
+    padding:8px 18px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  #reset:hover{opacity:.85;}
+</style>
+</head>
+<body>
+
+  <h1>Interactive Computer Graphics — Sprite Transformation</h1>
+  <p class="sub">ควบคุม sprite ด้วยคีย์บอร์ด: Translate / Rotate / Scale</p>
+
+  <canvas id="stage" width="640" height="440"></canvas>
+
+  <div id="hud">
+    <div>Position: <b id="hud-pos">0, 0</b></div>
+    <div>Rotation: <b id="hud-rot">0°</b></div>
+    <div>Scale: <b id="hud-scale">1.00</b></div>
+  </div>
+
+  <div id="controls">
+    <div class="key"><span>Arrow Keys</span><span>Translate</span></div>
+    <div class="key"><span>Q / E</span><span>Rotate</span></div>
+    <div class="key"><span>+ / -</span><span>Scale up / down</span></div>
+    <div class="key"><span>R</span><span>Reset</span></div>
+  </div>
+
+  <button id="reset">Reset Transform</button>
+
+<script>
+const canvas = document.getElementById('stage');
+const ctx = canvas.getContext('2d');
+
+const W = canvas.width, H = canvas.height;
+
+// sprite state
+const state = {
+  x: W/2,
+  y: H/2,
+  rotation: 0,   // radians
+  scale: 1,
+};
+
+const initial = { ...state };
+
+// speeds
+const MOVE_SPEED = 4;
+const ROT_SPEED = 0.05;
+const SCALE_SPEED = 0.03;
+
+const keys = {};
+
+// use e.code (physical key position) instead of e.key so this works
+// regardless of keyboard language/layout (e.g. Thai vs English input)
+window.addEventListener('keydown', (e) => {
+  keys[e.code] = true;
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)) {
+    e.preventDefault();
+  }
+});
+window.addEventListener('keyup', (e) => {
+  keys[e.code] = false;
+});
+
+document.getElementById('reset').addEventListener('click', resetTransform);
+
+function resetTransform(){
+  state.x = initial.x;
+  state.y = initial.y;
+  state.rotation = initial.rotation;
+  state.scale = initial.scale;
+}
+
+// load the actual 24-bit (RGB, no alpha) sprite image asset
+const spriteImg = new Image();
+let spriteLoaded = false;
+spriteImg.onload = () => { spriteLoaded = true; };
+spriteImg.src = 'sprite.png';
+
+const SPRITE_SIZE = 100; // draw size in px before scale transform
+
+function drawSprite(){
+  if (!spriteLoaded) return;
+  ctx.drawImage(
+    spriteImg,
+    -SPRITE_SIZE/2, -SPRITE_SIZE/2,
+    SPRITE_SIZE, SPRITE_SIZE
+  );
+}
+
+function update(){
+  if (keys['ArrowUp'])    state.y -= MOVE_SPEED;
+  if (keys['ArrowDown'])  state.y += MOVE_SPEED;
+  if (keys['ArrowLeft'])  state.x -= MOVE_SPEED;
+  if (keys['ArrowRight']) state.x += MOVE_SPEED;
+
+  if (keys['KeyQ']) state.rotation -= ROT_SPEED;
+  if (keys['KeyE']) state.rotation += ROT_SPEED;
+
+  if (keys['Equal'] || keys['NumpadAdd'])      state.scale = Math.min(3, state.scale + SCALE_SPEED);
+  if (keys['Minus'] || keys['NumpadSubtract']) state.scale = Math.max(0.2, state.scale - SCALE_SPEED);
+
+  if (keys['KeyR']) resetTransform();
+
+  // keep on screen
+  state.x = Math.max(0, Math.min(W, state.x));
+  state.y = Math.max(0, Math.min(H, state.y));
+}
+
+function render(){
+  ctx.clearRect(0,0,W,H);
+
+  // grid background
+  ctx.strokeStyle = '#20242e';
+  ctx.lineWidth = 1;
+  for(let gx=0; gx<=W; gx+=40){
+    ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke();
+  }
+  for(let gy=0; gy<=H; gy+=40){
+    ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke();
+  }
+
+  // apply transform: translate -> rotate -> scale
+  ctx.save();
+  ctx.translate(state.x, state.y);
+  ctx.rotate(state.rotation);
+  ctx.scale(state.scale, state.scale);
+  drawSprite();
+  ctx.restore();
+
+  // HUD text
+  document.getElementById('hud-pos').textContent =
+    `${Math.round(state.x)}, ${Math.round(state.y)}`;
+  document.getElementById('hud-rot').textContent =
+    `${Math.round(state.rotation * 180 / Math.PI)}°`;
+  document.getElementById('hud-scale').textContent =
+    state.scale.toFixed(2);
+}
+
+function loop(){
+  update();
+  render();
+  requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+</body>
+</html>
