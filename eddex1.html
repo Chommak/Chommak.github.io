@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chommak - CV</title>
+<style>
+  :root{
+    --bg:#0f1115;
+    --panel:#171a21;
+    --accent:#5eead4;
+    --accent2:#f472b6;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+    --border:#262b36;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', system-ui, sans-serif;
+    line-height:1.6;
+  }
+  .wrap{
+    max-width:800px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    padding-bottom:28px;
+    margin-bottom:32px;
+  }
+  header .info h1{
+    margin:0 0 4px;
+    font-size:2rem;
+  }
+  header .info p{
+    margin:0;
+    color:var(--muted);
+  }
+  header .contact{
+    font-size:.9rem;
+    color:var(--muted);
+    text-align:right;
+  }
+  header .contact a{
+    color:var(--accent);
+    text-decoration:none;
+  }
+  header .contact a:hover{ text-decoration:underline; }
+
+  /* ---------- Sections ---------- */
+  section{
+    margin-bottom:36px;
+  }
+  section h2{
+    font-size:1.1rem;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    border-bottom:1px solid var(--border);
+    padding-bottom:8px;
+    margin-bottom:16px;
+  }
+
+  .item{
+    margin-bottom:18px;
+  }
+  .item-head{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px;
+    font-weight:600;
+  }
+  .item-head .date{
+    color:var(--muted);
+    font-weight:400;
+    font-size:.9rem;
+  }
+  .item-sub{
+    color:var(--muted);
+    font-size:.9rem;
+    margin:2px 0 6px;
+  }
+  ul{
+    margin:6px 0 0;
+    padding-left:20px;
+  }
+
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tag{
+    background:var(--panel);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:.85rem;
+  }
+
+  /* ---------- Project / Demo card ---------- */
+  .project-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+  }
+  .project-card h3{
+    margin:0 0 6px;
+    font-size:1.05rem;
+  }
+  .project-card p{
+    margin:0 0 14px;
+    color:var(--muted);
+    font-size:.92rem;
+  }
+  .btn{
+    display:inline-block;
+    background:var(--accent);
+    color:#0f1115;
+    text-decoration:none;
+    font-weight:600;
+    padding:9px 18px;
+    border-radius:8px;
+    font-size:.9rem;
+  }
+  .btn:hover{ opacity:.85; }
+
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:.8rem;
+    margin-top:40px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ========== HEADER: แก้ชื่อ / ตำแหน่ง / ติดต่อ ตรงนี้ ========== -->
+  <header>
+    <div class="info">
+      <h1>ปรินทร บุญจันทร์</h1>
+      <p>นิสิต สาขาวิชาวิทยาการคอมพิวเตอร์ (ภาคพิเศษ) — มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตกำแพงแสน</p>
+    </div>
+    <div class="contact">
+      <div><a href="https://github.com/Chommak" target="_blank">github.com/Chommak</a></div>
+    </div>
+  </header>
+
+  <!-- ========== เกี่ยวกับฉัน ========== -->
+  <section>
+    <h2>About</h2>
+    <p>
+      นิสิตสาขาวิทยาการคอมพิวเตอร์ ภาคพิเศษ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตกำแพงแสน
+      สนใจด้าน Interactive Computer Graphics และการพัฒนาเว็บ
+    </p>
+  </section>
+
+  <!-- ========== การศึกษา ========== -->
+  <section>
+    <h2>Education</h2>
+    <div class="item">
+      <div class="item-head">
+        <span>มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตกำแพงแสน</span>
+      </div>
+      <div class="item-sub">สาขาวิชาวิทยาการคอมพิวเตอร์ (ภาคพิเศษ)</div>
+      <ul>
+        <li>วิชาที่เกี่ยวข้อง: Interactive Computer Graphics</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== ทักษะ ========== -->
+  <section>
+    <h2>Skills</h2>
+    <div class="tags">
+      <span class="tag">HTML / CSS / JavaScript</span>
+      <span class="tag">Python</span>
+      <span class="tag">Git / GitHub</span>
+      <span class="tag">C++</span>
+      <span class="tag">Computer Graphics</span>
+    </div>
+  </section>
+
+  <!-- ========== หัวข้อ Interactive Computer Graphics ========== -->
+  <section>
+    <h2>Interactive Computer Graphics</h2>
+    <div class="project-card">
+      <h3>Sprite Transformation Demo</h3>
+      <p>
+        โปรเจกต์สาธิตการแปลงรูป 2D (Translate, Rotate, Scale) แบบ real-time
+        ควบคุมด้วยคีย์บอร์ด เขียนด้วย JavaScript Canvas API
+      </p>
+      <a class="btn" href="transformation.html">ดู Demo</a>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2569 — สร้างและโฮสต์ด้วย GitHub Pages
+  </footer>
+
+</div>
+</body>
+</html>
